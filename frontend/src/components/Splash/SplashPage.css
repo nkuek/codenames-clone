@@ -1,0 +1,41 @@
+.splash-page-header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.splash-page-header-container > h1 {
+    font-size: 2em;
+}
+
+.splash-page-create-room-container {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+.splash-page-create-room-container > div {
+    padding: 10px 20px;
+    background-color: var(--button-color);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.splash-page-create-room-container > div:hover {
+    background-color: var(--button-hover);
+}
+
+.splash-page-how-to-play-container {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.how-to-play {
+    background-color: gray;
+    padding: 20px;
+    color: white;
+    border-radius: 10px;
+}
