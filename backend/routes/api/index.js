@@ -1,9 +1,10 @@
 const router = require('express').Router();
+const nameGeneratorRouter = require('./nameGenerator');
 
 // GET /api/set-token-cookie
 const asyncHandler = require('express-async-handler');
 const { setTokenCookie } = require('../../utils/auth.js');
-const { User } = require('../../db/models');
+const User = require('../../db/models');
 router.get(
     '/set-token-cookie',
     asyncHandler(async (req, res) => {
@@ -37,4 +38,5 @@ router.post('/test', function (req, res) {
     res.json({ requestBody: req.body });
 });
 
+router.use('/nameGenerator', nameGeneratorRouter);
 module.exports = router;

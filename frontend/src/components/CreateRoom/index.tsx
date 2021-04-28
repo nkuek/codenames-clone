@@ -1,51 +1,42 @@
-import React, { FC, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useHistory } from 'react-router-dom';
-import { Socket } from 'socket.io-client';
+import { RootState } from '../../index';
+import io from 'socket.io-client';
+import { setSession } from '../../store/gameSession';
+import { setSocket, removeSocket } from '../../store/websocket';
+import nameGenerator from '../utils/nameGenerator';
 
 import './CreateRoom.css';
 
-interface Props {
-    socket: typeof Socket;
-}
-
-interface Word {
-    word: string;
-}
-
-interface QueryData {
-    smallWordList: Word[];
-}
-
 const CreateRoom = () => {
+    const dispatch = useAppDispatch();
     const [nickname, setNickname] = useState('');
     const [errors, setErrors] = useState<string[]>([]);
 
     const history = useHistory();
+    const socket = useAppSelector((state) => state.socket);
+    const gameSession = useAppSelector((state) => state.gameSession);
 
-    // const randomNameGenerator = () => {
-    //     const results = data?.smallWordList;
-    //     const urlString = results
-    //         ?.map((result:object) => result.word.toLowerCase())
-    //         .slice(0, 3)
-    //         .join('-');
-    //     return urlString;
-    // };
+    useEffect(() => {
+        if (gameSession) {
+            const socket = io('localhost:5000');
+            dispatch(setSocket(socket));
+        }
+    }, [gameSession]);
 
-    // const handleNewRoomSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    //     const errors = [];
-    //     e.preventDefault();
-    //     if (!nickname) {
-    //         errors.push('Please enter a nick name!');
-    //         setErrors(errors);
-    //         return;
-    //     }
-    //     const urlString = randomNameGenerator();
-    //     localStorage.setItem(
-    //         'gameSession',
-    //         JSON.stringify({ host: nickname, roomName: urlString })
-    //     );
-    //     history.push(`/room/${urlString}`);
-    // };
+    const handleNewRoomSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        const errors = [];
+        e.preventDefault();
+        if (!nickname) {
+            errors.push('Please enter a nick name!');
+            setErrors(errors);
+            return;
+        }
+        const url = await nameGenerator();
+        dispatch(setSession({ roomName: url, users: [nickname] }));
+        // localStorage.setItem('gameSession', JSON.stringify({ nickname }));
+    };
     return (
         <div className="create-room-wrapper">
             <div className="create-room-container">
@@ -57,7 +48,7 @@ const CreateRoom = () => {
                         <div key={idx}>{error}</div>
                     ))}
                 <form
-                    // onSubmit={handleNewRoomSubmit}
+                    onSubmit={handleNewRoomSubmit}
                     className="create-room-form"
                 >
                     <div>To create a new room, first enter a nickname</div>

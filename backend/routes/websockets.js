@@ -4,6 +4,8 @@ const io = require('socket.io')({
     },
 });
 
+const connectedUsers = {};
+
 io.on('connection', (socket) => {
     socket.on('test', () => {
         console.log('hello from test route!');

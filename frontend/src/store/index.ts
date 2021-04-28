@@ -1,6 +1,8 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import session from './session';
+import gameSessionReducer from './gameSession';
+
+import socketReducer from './websocket';
 
 declare global {
     interface Window {
@@ -9,7 +11,8 @@ declare global {
 }
 
 const rootReducer = combineReducers({
-    session,
+    socket: socketReducer,
+    gameSession: gameSessionReducer,
 });
 
 let enhancer: any;

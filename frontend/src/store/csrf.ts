@@ -1,9 +1,5 @@
 import Cookies from 'js-cookie';
 
-interface Data extends Response {
-    data?: object;
-}
-
 interface Options {
     method?: string;
     headers?: any;
@@ -24,7 +20,7 @@ export async function fetch(url: string, options: Options = {}) {
         options.headers['XSRF-Token'] = Cookies.get('XSRF-TOKEN');
     }
     // call the default window's fetch with the url and the options passed in
-    const res: Data = await window.fetch(url, options);
+    const res: any = await window.fetch(url, options);
 
     // if the response's body is JSON, then parse the JSON body and set it to a
     // key of `data` on the response
