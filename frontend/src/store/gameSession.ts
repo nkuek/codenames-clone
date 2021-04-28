@@ -1,9 +1,10 @@
+import { Reducer } from 'redux';
 const SET_SESSION = 'gameSession/setSession';
 const REMOVE_SESSION = 'gameSession/removeSession';
 
 interface Session {
     roomName: string;
-    users: [string];
+    users: string[];
 }
 
 interface SessionAction {
@@ -20,14 +21,18 @@ export const removeSession = () => ({
     type: REMOVE_SESSION,
 });
 
-const gameSessionReducer = (state = null, action: SessionAction) => {
+const initialState = null;
+const gameSessionReducer: Reducer<Session | null, SessionAction> = (
+    state = initialState,
+    action: SessionAction
+) => {
     switch (action.type) {
         case SET_SESSION:
-            return action.session;
+            return { ...state, ...action.session };
         case REMOVE_SESSION:
-            return null;
+            return initialState;
         default:
-            return null;
+            return state;
     }
 };
 

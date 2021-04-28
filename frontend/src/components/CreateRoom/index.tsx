@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useSelector, useDispatch } from 'react-redux';
+// import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '../../index';
 import io from 'socket.io-client';
@@ -10,17 +11,17 @@ import nameGenerator from '../utils/nameGenerator';
 import './CreateRoom.css';
 
 const CreateRoom = () => {
-    const dispatch = useAppDispatch();
+    const dispatch = useDispatch();
     const [nickname, setNickname] = useState('');
     const [errors, setErrors] = useState<string[]>([]);
 
     const history = useHistory();
-    const socket = useAppSelector((state) => state.socket);
-    const gameSession = useAppSelector((state) => state.gameSession);
+    const socket = useSelector((state: RootState) => state.socket);
+    const gameSession = useSelector((state: RootState) => state.gameSession);
 
     useEffect(() => {
         if (gameSession) {
-            const socket = io('localhost:5000');
+            const socket: SocketIOClient.Socket = io('localhost:5000');
             dispatch(setSocket(socket));
         }
     }, [gameSession]);
